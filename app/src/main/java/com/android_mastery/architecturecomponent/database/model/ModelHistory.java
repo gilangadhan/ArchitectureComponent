@@ -8,9 +8,23 @@ package com.android_mastery.architecturecomponent.database.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.v7.util.DiffUtil;
 
 @Entity(tableName = "history")
 public class ModelHistory {
+    public static DiffUtil.ItemCallback<ModelHistory> DIFF_CALLBACK = new DiffUtil.ItemCallback<ModelHistory>() {
+        @Override
+        public boolean areItemsTheSame(ModelHistory oldItem, ModelHistory newItem) {
+            return oldItem.id_history == newItem.id_history;
+        }
+
+        @Override
+        public boolean areContentsTheSame(ModelHistory oldItem, ModelHistory newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_history")
     int id_history;

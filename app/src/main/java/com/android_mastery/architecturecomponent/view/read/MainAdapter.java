@@ -5,6 +5,7 @@
 
 package com.android_mastery.architecturecomponent.view.read;
 
+import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,12 +18,12 @@ import com.android_mastery.architecturecomponent.database.model.ModelHistory;
 
 import java.util.List;
 
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.HistoryViewHolder> {
+public class MainAdapter extends PagedListAdapter<ModelHistory, MainAdapter.HistoryViewHolder> {
 
-    private List<ModelHistory> modelHistories;
     private View.OnLongClickListener longClickListener;
 
     public MainAdapter(View.OnLongClickListener longClickListener) {
+        super(ModelHistory.DIFF_CALLBACK);
         this.longClickListener = longClickListener;
     }
 
@@ -34,25 +35,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.HistoryViewHol
 
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
-        ModelHistory modelHistory = modelHistories.get(position);
-        holder.tanggal.setText(modelHistory.getTanggal_history());
-        holder.alamat.setText(modelHistory.getAlamat_history());
-        holder.itemView.setTag(modelHistory);
-        holder.itemView.setOnLongClickListener(longClickListener);
-    }
-
-    public void addHistory(List<ModelHistory> models) {
-        this.modelHistories = models;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemCount() {
-        if (modelHistories != null) {
-            return modelHistories.size();
-        } else {
-            return 0;
+        ModelHistory modelHistory = getItem(position);
+        if (modelHistory != null) {
+            holder.tanggal.setText(modelHistory.getTanggal_history());
+            holder.alamat.setText(modelHistory.getAlamat_history());
+            holder.itemView.setTag(modelHistory);
+            holder.itemView.setOnLongClickListener(longClickListener);
         }
+
     }
 
     class HistoryViewHolder extends RecyclerView.ViewHolder {

@@ -8,30 +8,38 @@ package com.android_mastery.architecturecomponent.view.read;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.android_mastery.architecturecomponent.database.base.DatabaseApp;
 import com.android_mastery.architecturecomponent.database.model.ModelHistory;
 
-import java.util.List;
-
 public class MainViewModel extends AndroidViewModel {
-    private final LiveData<List<ModelHistory>> itemList;
+    private final LiveData<PagedList<ModelHistory>> itemList;
 
     private DatabaseApp databaseApp;
+
     public MainViewModel(@NonNull Application application) {
         super(application);
 
         databaseApp = DatabaseApp.getDatabase(this.getApplication());
-        itemList = databaseApp.getDaoHistory().getAllHistory();
+        itemList = new LivePagedListBuilder<>(databaseApp.getDaoHistory().getAllHistory(),
+                new PagedList.Config.Builder()
+                        .setPageSize(1)
+                        .setPrefetchDistance(1)
+                        .setEnablePlaceholders(true)
+                        .build())
+                .setInitialLoadKey(0)
+                .build();
     }
 
-    public LiveData<List<ModelHistory>> getAllHistory(){
+    public LiveData<PagedList<ModelHistory>> getAllHistory() {
         return itemList;
     }
 
-    public void deleteHistory(ModelHistory modelHistory){
+    public void deleteHistory(ModelHistory modelHistory) {
         new deletAsynTask(databaseApp).execute(modelHistory);
     }
 
@@ -47,5 +55,10 @@ public class MainViewModel extends AndroidViewModel {
             database.getDaoHistory().deleteHistory(modelHistories[0]);
             return null;
         }
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
     }
 }

@@ -46,4 +46,15 @@ dependencies {
     implementation "android.arch.lifecycle:reactivestreams:$lifecycle_version"
     implementation 'com.android.support:recyclerview-v7:27.1.1'
 
+
+    def paging_version = "1.0.1"
+
+    implementation "android.arch.paging:runtime:$paging_version"
+
+    // alternatively - without Android dependencies for testing
+    testImplementation "android.arch.paging:common:$paging_version"
+
+    // optional - RxJava support, currently in release candidate
+    implementation "android.arch.paging:rxjava2:1.0.1"
 }
+

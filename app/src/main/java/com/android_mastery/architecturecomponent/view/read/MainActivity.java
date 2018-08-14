@@ -7,6 +7,7 @@ package com.android_mastery.architecturecomponent.view.read;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.paging.PagedList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -44,10 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainAdapter);
 
-        mainViewModel.getAllHistory().observe(MainActivity.this, new Observer<List<ModelHistory>>() {
+        mainViewModel.getAllHistory().observe(MainActivity.this, new Observer<PagedList<ModelHistory>>() {
             @Override
-            public void onChanged(@Nullable List<ModelHistory> modelHistories) {
-                mainAdapter.addHistory(modelHistories);
+            public void onChanged(@Nullable PagedList<ModelHistory> modelHistories) {
+                mainAdapter.submitList(modelHistories);
             }
         });
     }

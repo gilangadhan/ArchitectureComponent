@@ -6,6 +6,7 @@
 package com.android_mastery.architecturecomponent.database.dao;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -22,7 +23,7 @@ public interface DaoHistory {
 
     //get all data
     @Query("select * from history order by id_history desc")
-    LiveData<List<ModelHistory>> getAllHistory();
+    DataSource.Factory<Integer, ModelHistory> getAllHistory();
 
     //get data from id_history
     @Query("select * from history where id_history = :id_history")
